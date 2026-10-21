@@ -1,0 +1,12 @@
+---
+ipa_fictional_users:
+  - {name: test-avery-stone, first: Avery, last: Stone}
+  - {name: test-morgan-reed, first: Morgan, last: Reed}
+  - {name: test-riley-brooks, first: Riley, last: Brooks}
+  - {name: test-jordan-vale, first: Jordan, last: Vale}
+  - {name: test-casey-wren, first: Casey, last: Wren}
+  - {name: test-quinn-marsh, first: Quinn, last: Marsh}
+  - {name: test-rowan-pike, first: Rowan, last: Pike}
+  - {name: test-skyler-finch, first: Skyler, last: Finch}
+  - {name: test-emery-lane, first: Emery, last: Lane}
+  - {name: test-parker-moss, first: Parker, last: Moss}

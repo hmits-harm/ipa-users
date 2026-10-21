@@ -1,0 +1,10 @@
+---
+ipa_users:
+  - name: alex.smith
+    first: Alex
+    last: Smith
+    email:
+      - alex.smith@example.com
+    # Store initial passwords in an encrypted vars file, if needed.
+    # password: '{{ vault_alex_password }}'
+    shell: /bin/bash

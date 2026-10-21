@@ -1,0 +1,5 @@
+---
+ipa_users: []
+ipa_create_test_users: false
+# Explicit cleanup; switching creation off alone does not delete accounts.
+ipa_delete_test_users: false

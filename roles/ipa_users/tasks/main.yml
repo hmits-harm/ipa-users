@@ -1,0 +1,56 @@
+---
+- name: Validate account controls
+  ansible.builtin.assert:
+    that:
+      - ipa_users is sequence and ipa_users is not string and ipa_users is not mapping
+      - not (ipa_create_test_users | bool and ipa_delete_test_users | bool)
+      - (ipa_users | map(attribute='name') | list | intersect(ipa_fictional_users | map(attribute='name') | list) | length) == 0
+    fail_msg: Supply a user list, keep fictional usernames reserved, and enable only one test-user action.
+
+- name: Ensure configured users exist
+  freeipa.ansible_freeipa.ipauser:
+    ipaadmin_principal: "{{ ipaadmin_principal }}"
+    ipaadmin_password: "{{ ipaadmin_password | default(omit) }}"
+    users: "{{ ipa_users }}"
+    update_password: on_create
+    state: present
+  when: ipa_users | length > 0
+  no_log: true
+
+- name: Ensure fictional accounts exist
+  freeipa.ansible_freeipa.ipauser:
+    ipaadmin_principal: "{{ ipaadmin_principal }}"
+    ipaadmin_password: "{{ ipaadmin_password | default(omit) }}"
+    name: "{{ item.name }}"
+    first: "{{ item.first }} test-user"
+    last: "{{ item.last }}"
+    fullname: "{{ item.first }} test-user {{ item.last }}"
+    displayname: "{{ item.first }} test-user {{ item.last }}"
+    userclass: test-user
+    password: password
+    update_password: on_create
+    state: present
+  loop: "{{ ipa_fictional_users }}"
+  when: ipa_create_test_users | bool
+  no_log: true
+
+# Apply after creation: admin-created passwords otherwise expire immediately.
+- name: Ensure fictional passwords have no practical expiration
+  freeipa.ansible_freeipa.ipauser:
+    ipaadmin_principal: "{{ ipaadmin_principal }}"
+    ipaadmin_password: "{{ ipaadmin_password | default(omit) }}"
+    name: "{{ item.name }}"
+    passwordexpiration: '9999-12-31T23:59:59Z'
+    state: present
+  loop: "{{ ipa_fictional_users }}"
+  when: ipa_create_test_users | bool
+  no_log: true
+
+- name: Remove the ten reserved fictional accounts
+  freeipa.ansible_freeipa.ipauser:
+    ipaadmin_principal: "{{ ipaadmin_principal }}"
+    ipaadmin_password: "{{ ipaadmin_password | default(omit) }}"
+    name: "{{ ipa_fictional_users | map(attribute='name') | list }}"
+    state: absent
+  when: ipa_delete_test_users | bool
+  no_log: true
