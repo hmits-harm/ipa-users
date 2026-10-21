@@ -1,0 +1,25 @@
+all:
+  children:
+    controller:
+      hosts:
+        code.lab.shared:
+          ansible_connection: local
+    ipa_server:
+      hosts:
+        ipa.lab.shared:
+          ansible_host: 10.211.55.107
+    ipa_client:
+      hosts:
+        client.lab.shared:
+          ansible_host: 10.211.55.110
+        client02.lab.shared:
+          ansible_host: 10.211.55.112
+  vars:
+    ansible_password: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          30353336373933333433393430336530383431643266383063626634373064663335383633363063
+          6530653831323466313734633036333236623431333237300a383132346231366336333865643866
+          66623436643238366130353765386535363265373430376465613864343232363738623732643137
+          3364613365396138620a333231343330363466653430613137373136623433633565363934653165
+          37306464316231346531316563396566383866613438323761666334386534313134
+    ansible_become_pass: "{{ ansible_password }}"

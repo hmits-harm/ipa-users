@@ -1,0 +1,12 @@
+---
+ipaclient_domain: lab.shared
+ipaclient_realm: LAB.SHARED
+ipaclient_servers: "{{ groups['ipa_server'] }}"
+ipaclient_hostname: "{{ inventory_hostname }}"
+
+ipaadmin_principal: admin
+# Reuse the Vault-encrypted connection password without duplicating the secret.
+ipaadmin_password: "{{ ansible_password }}"
+
+# Create home directories at first login for domain users.
+ipaclient_mkhomedir: true

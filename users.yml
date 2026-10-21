@@ -1,0 +1,12 @@
+---
+- name: Manage FreeIPA accounts
+  hosts: ipa_server
+  gather_facts: false
+  # Make directory changes once, even when the inventory contains replicas.
+  serial: 1
+  vars:
+    ipaadmin_principal: admin
+    ipaadmin_password: "{{ ansible_password }}"
+  roles:
+    - role: ipa_users
+      when: inventory_hostname == groups['ipa_server'][0]
